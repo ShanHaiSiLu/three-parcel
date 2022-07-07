@@ -17,39 +17,6 @@ camera.lookAt(scene.position);
 const light = new THREE.AmbientLight(0x404040);
 scene.add(light);
 
-const raycaster = new THREE.Raycaster();
-const vec = new THREE.Vector2();
-
-const cubeGeometry = new THREE.BoxBufferGeometry(0.8, 0.8, 0.8);
-const cubeMaterial = new THREE.MeshBasicMaterial({
-  wireframe: true,
-});
-const redMaterial = new THREE.MeshBasicMaterial({ color: "red" });
-
-let cubes = [];
-for (var x = 0; x < 10; x++) {
-  for (var y = 0; y < 10; y++) {
-    for (var z = 0; z < 10; z++) {
-      let mesh = new THREE.Mesh(cubeGeometry, cubeMaterial);
-      mesh.position.set(x, y, z);
-      scene.add(mesh);
-      cubes.push(mesh);
-    }
-  }
-}
-
-window.addEventListener("click", ({ clientX, clientY }) => {
-  vec.x = (clientX / window.innerWidth) * 2 - 1;
-  vec.y = -((clientY / window.innerHeight) * 2 - 1);
-
-  // 发出射线
-  raycaster.setFromCamera(vec, camera);
-  // 获取碰撞到的物体
-  let result = raycaster.intersectObjects(cubes);
-  console.log(result);
-  result.forEach((item) => (item.object.material = redMaterial));
-});
-
 // 渲染器
 let renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
