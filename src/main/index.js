@@ -1,54 +1,71 @@
-import * as THREE from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+// 获取canvas元素
+let canvas = document.getElementById("canvas");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
-// 场景
-let scene = new THREE.Scene();
+// 获取canvas的WEBGL绘图上下文
+let gl = canvas.getContext("webgl");
 
-// 相机
-// 通过将参数抽离的方式，避免被格式化
-let arr = [45, window.innerWidth / window.innerHeight, 0.01, 4000];
-let camera = new THREE.PerspectiveCamera(...arr);
-camera.position.set(10, 15, 30);
-camera.lookAt(scene.position);
+// 第一次创建webgl上下文时，需要设置视口大小
+gl.viewport(0, 0, canvas.width, canvas.height);
 
-const cubeMaterial = new THREE.MeshStandardMaterial();
+// 创建顶点着色器
+let vertexShader = gl.createShader(gl.VERTEX_SHADER);
+// 创建顶点着色器源码，需要编写glsl代码
+gl.shaderSource(
+  vertexShader,
+  `
+    attribute vec4 a_Position;
+    void main() {
+      gl_Position = a_Position;
+    }
+`
+);
+// 编译顶点着色器
+gl.compileShader(vertexShader);
 
-// 添加光
-// 环境光
-const ambLight = new THREE.AmbientLight(0xffffff, 1);
-scene.add(ambLight);
-// 平行光
-const dirLight = new THREE.DirectionalLight(0xffffff, 0.5);
-dirLight.castShadow = true;
-scene.add(dirLight);
+// 创建片元着色器
+let fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+// 创建片元着色器源码，需要编写glsl代码
+gl.shaderSource(
+  fragmentShader,
+  `
+    void main() {
+      gl_FragColor = vec4(${Math.random()}, ${Math.random()}, ${Math.random()}, 1.0);
+    }
+ `
+);
+// 编译片元着色器
+gl.compileShader(fragmentShader);
 
-// 渲染器
-let renderer = new THREE.WebGLRenderer();
-renderer.setSize(window.innerWidth, window.innerHeight);
-// 设置渲染器开启阴影计算
-renderer.shadowMap.enabled = true;
-// 开启渲染器的物理渲染模式（用于计算衰减量）
-renderer.physicallyCorrectLights = true;
-document.body.appendChild(renderer.domElement);
+// 创建程序来连接顶点着色器和片元着色器
+let program = gl.createProgram();
+// 链接顶点着色器和片元着色器
+gl.attachShader(program, vertexShader);
+gl.attachShader(program, fragmentShader);
 
-// 控制器
-new OrbitControls(camera, renderer.domElement);
+// 链接程序
+gl.linkProgram(program);
+// 使用程序进行渲染
+gl.useProgram(program);
 
-// 辅助坐标
-let axesHelper = new THREE.AxesHelper(25);
-scene.add(axesHelper);
+// 创建顶点缓冲区对象
+let vertexBuffer = gl.createBuffer();
+// 绑定顶点缓冲区对象
+gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+// 向顶点缓冲区对象中写入数据
+let vertices = new Float32Array([0.0, 0.5, -0.5, -0.5, 0.5, -0.5]);
+// 将缓冲区数据传入
+// gl.STATIC_DRAW表示数据不会改变
+gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
 
-// 设置时钟
-let clock = new THREE.Clock();
+// 获取顶点着色器中的a_Position变量
+let a_Position = gl.getAttribLocation(program, "a_Position");
+// 将顶点缓冲区对象分配给a_Position变量，告诉webgl如何解析顶点数据
+gl.vertexAttribPointer(a_Position, 2, gl.FLOAT, false, 0, 0);
 
-// 渲染函数
-function render() {
-  // let time = clock.getElapsedTime();
-  // 获取两帧知之间的时间差
-  let deltaTime = clock.getDelta();
+// 启动顶点着色器中的a_Position变量
+gl.enableVertexAttribArray(a_Position)
 
-  renderer.render(scene, camera);
-  requestAnimationFrame(render);
-}
-
-render();
+// 绘制三角形
+gl.drawArrays(gl.TRIANGLES, 0, 3)
