@@ -56,15 +56,6 @@ const sphereBody = new CANNON.Body({
 // 将物体添加至物理世界
 world.addBody(sphereBody);
 
-let ad1 = document.getElementById("audio1");
-
-// 给小球添加碰撞的监听
-sphereBody.addEventListener("collide", (e) => {
-  console.log("发生了碰撞：", e);
-  console.log("碰撞的强度为：", e.contact.getImpactVelocityAlongNormal());
-  ad1.play();
-});
-
 // 物理世界创建地面
 const floorShape = new CANNON.Plane();
 const floorBody = new CANNON.Body();
@@ -75,7 +66,7 @@ floorBody.addShape(floorShape);
 floorBody.position.set(0, -5, 0);
 // 旋转地面
 floorBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2);
-world.addBody(floorBody);
+world.addBody(floorBody)
 
 // 添加光
 // 环境光
