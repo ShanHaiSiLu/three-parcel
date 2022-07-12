@@ -2,9 +2,9 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 // 顶点着色器
-import rawVertexShader from "../shader/raw/vertex.glsl";
+import rawVertexShader from "../shader/07-raw/vertex.glsl";
 // 片元着色器
-import rawFragmentShader from "../shader/raw/fragment.glsl";
+import rawFragmentShader from "../shader/07-raw/fragment.glsl";
 
 import * as dat from "dat.gui";
 
