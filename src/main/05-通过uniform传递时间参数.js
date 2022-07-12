@@ -2,11 +2,10 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 // 顶点着色器
-import rawVertexShader from "../shader/raw/vertex.glsl";
+import rawVertexShader from "../shader/05-raw/vertex.glsl";
 // 片元着色器
-import rawFragmentShader from "../shader/raw/fragment.glsl";
+import rawFragmentShader from "../shader/05-raw/fragment.glsl";
 
-const texture = require("../assets/texture/ca.jpeg")
 // 场景
 var scene = new THREE.Scene();
 
@@ -25,9 +24,6 @@ const rawShaderMaterial = new THREE.RawShaderMaterial({
     uTime: {
       value: 0,
     },
-    uTexture: {
-      value: new THREE.TextureLoader().load(texture)
-    }
   },
 });
 var plane = new THREE.Mesh(

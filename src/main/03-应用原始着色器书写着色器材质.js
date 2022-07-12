@@ -2,11 +2,11 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 // 顶点着色器
-import rawVertexShader from "../shader/raw/vertex.glsl";
+import rawVertexShader from "../shader/03-raw/vertex.glsl"
 // 片元着色器
-import rawFragmentShader from "../shader/raw/fragment.glsl";
+import rawFragmentShader from "../shader/03-raw/fragment.glsl"
 
-const texture = require("../assets/texture/ca.jpeg")
+
 // 场景
 var scene = new THREE.Scene();
 
@@ -18,17 +18,6 @@ const rawShaderMaterial = new THREE.RawShaderMaterial({
   vertexShader: rawVertexShader,
   // 片元着色器
   fragmentShader: rawFragmentShader,
-  // 双面渲染
-  side: THREE.DoubleSide,
-  // 向着色器中传入变量
-  uniforms: {
-    uTime: {
-      value: 0,
-    },
-    uTexture: {
-      value: new THREE.TextureLoader().load(texture)
-    }
-  },
 });
 var plane = new THREE.Mesh(
   new THREE.PlaneBufferGeometry(1, 1, 64, 64),
@@ -67,12 +56,8 @@ document.body.appendChild(renderer.domElement);
 // 控制器
 var controls = new OrbitControls(camera, renderer.domElement);
 
-// 时钟
-var clock = new THREE.Clock();
-
 // 渲染函数
 function render() {
-  rawShaderMaterial.uniforms.uTime.value = clock.getElapsedTime();
   renderer.render(scene, camera);
   requestAnimationFrame(render);
 }
