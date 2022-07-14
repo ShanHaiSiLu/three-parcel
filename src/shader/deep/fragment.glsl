@@ -7,6 +7,9 @@ uniform float uTime;
 // 获取来自顶点着色器的属性
 varying vec2 vUv;
 
+// 定义常量
+float PI = 3.1415926;
+
 // 随机数
 float random(vec2 st) {
     return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) *
@@ -14,6 +17,11 @@ float random(vec2 st) {
 }
 
 // 旋转函数
+/**
+ * @uv 要进行旋转的点的uv坐标
+ * @rotation 旋转的角度（做动效时一般设置为变量）
+ * @mid 旋转中心
+ */
 vec2 rotate(vec2 uv, float rotation, vec2 mid) {
     return vec2(cos(rotation) * (uv.x - mid.x) + sin(rotation) * (uv.y - mid.y) + mid.x, cos(rotation) * (uv.y - mid.y) - sin(rotation) * (uv.x - mid.x) + mid.y);
 }
@@ -174,7 +182,6 @@ void main() {
     // gl_FragColor = vec4(strength, strength, strength, strength);
 
     // 28. 十字旋转
-    // float PI = 3.1415926;
     // vec2 rotateUV = rotate(vUv, PI / 180.0 * uTime * 30.0, vec2(0.5));
     // float strength = 0.15 / distance(vec2(rotateUV.x, (rotateUV.y - 0.5) * 5.0 + 0.5), vec2(0.5, 0.5));
     // strength += 0.15 / distance(vec2(rotateUV.y, (rotateUV.x - 0.5) * 5.0 + 0.5), vec2(0.5, 0.5));
@@ -188,13 +195,40 @@ void main() {
     // float strength = step(0.35, distance(vUv, vec2(0.5))) * (1.0 - step(0.4, distance(vUv, vec2(0.5))));
     // gl_FragColor = vec4(strength, strength, strength, 1);
 
-    // 30-2. 使用距离函数的圆环
-    // float strength = distance(vUv, vec2(0.5))
+    // 31. 使用距离函数的圆环
+    // float strength = 1.0 - step(0.01, abs(distance(vUv, vec2(0.5)) - 0.25));
     // gl_FragColor = vec4(strength, strength, strength, 1);
 
-    // 31. 圆环联动三角函数
-    vec2 angleUV = vec2(vUv.x, vUv.y + sin(vUv.x * 8.0) * 0.2 - 0.3);
-    float strength = step(0.39, distance(angleUV, vec2(0.5))) * (1.0 - step(0.4, distance(angleUV, vec2(0.5))));
-    gl_FragColor = vec4(strength, strength, strength, 1);
+    // 32. 圆环联动三角函数
+    // vec2 angleUV = vec2(vUv.x, vUv.y + sin(vUv.x * 30.0) * 0.1 );
+    // float strength = step(0.39, distance(angleUV, vec2(0.5))) * (1.0 - step(0.4, distance(angleUV, vec2(0.5))));
+    // gl_FragColor = vec4(strength, strength, strength, 1);
+
+    // 33. 距离函数圆环双次联动三角函数
+    // vec2 angleUV = vec2(vUv.x + sin(vUv.y * 80.0) * 0.1, vUv.y + sin(vUv.x * 80.0) * 0.1);
+    // float strength = 1.0 - step(0.01, abs(distance(angleUV, vec2(0.5)) - 0.25));
+    // gl_FragColor = vec4(strength, strength, strength, 1);
+
+    // 34. 圆环中加入时间参数
+    // vec2 angleUV = vec2(vUv.x + sin((vUv.y + uTime * 0.2) * 80.0) * 0.1, vUv.y + sin((vUv.x + uTime * 0.1) * 40.0) * 0.1);
+    // float strength = 1.0 - step(0.01, abs(distance(angleUV, vec2(0.5)) - 0.25));
+    // gl_FragColor = vec4(strength, strength, strength, 1);
+
+    // 35. 根据反正切函数获取角度并根据角度显示视图
+    // float angle = atan(vUv.x, vUv.y);
+    // float strength = angle;
+    // gl_FragColor = vec4(strength, strength, strength, 1);
+
+    // 36. 根据角度实现螺旋渐变
+    // float angle = atan(vUv.x - 0.5, vUv.y - 0.5);
+    // float strength = (angle + PI) / (2.0 * PI);
+    // gl_FragColor = vec4(strength, strength, strength, 1);
+
+    // 37. 实现雷达扫射
+    float alaph = 1.0 - step(0.35, distance(vUv, vec2(0.5)));
+    vec2 rotateUV = rotate(vUv, uTime * 3.0, vec2(0.5));
+    float angle = atan(rotateUV.x - 0.5, rotateUV.y - 0.5);
+    float strength = (angle + PI) / (2.0 * PI);
+    gl_FragColor = vec4(strength, strength, strength, alaph);
 
 }
