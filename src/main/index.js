@@ -2,18 +2,17 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 // 顶点着色器
-import rawVertexShader from "../shader/raw/vertex.glsl";
+import rawVertexShader from "../shader/deep/vertex.glsl";
 // 片元着色器
-import rawFragmentShader from "../shader/raw/fragment.glsl";
+import rawFragmentShader from "../shader/deep/fragment.glsl";
 
 const texture = require("../assets/texture/ca.jpeg")
 // 场景
 var scene = new THREE.Scene();
 
-// 模型
-// var material = new THREE.MeshLambertMaterial({ color: 0x0000ff });
 // 创建着色器材质
-const rawShaderMaterial = new THREE.RawShaderMaterial({
+const shaderMaterial = new THREE.ShaderMaterial({
+  transparent: true,
   // 顶点着色器
   vertexShader: rawVertexShader,
   // 片元着色器
@@ -32,7 +31,7 @@ const rawShaderMaterial = new THREE.RawShaderMaterial({
 });
 var plane = new THREE.Mesh(
   new THREE.PlaneBufferGeometry(1, 1, 64, 64),
-  rawShaderMaterial
+  shaderMaterial
 );
 scene.add(plane);
 
@@ -51,7 +50,7 @@ var camera = new THREE.PerspectiveCamera(
   1,
   1000
 );
-camera.position.set(1, 1, 2);
+camera.position.set(0, 0, 3);
 camera.lookAt(scene.position);
 
 // 辅助坐标
@@ -61,7 +60,7 @@ scene.add(axesHelper);
 // 渲染器
 var renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setClearColor(0xb9d3ff, 1);
+renderer.setClearColor(0x0c0f0a, 1);
 document.body.appendChild(renderer.domElement);
 
 // 控制器
@@ -72,7 +71,7 @@ var clock = new THREE.Clock();
 
 // 渲染函数
 function render() {
-  rawShaderMaterial.uniforms.uTime.value = clock.getElapsedTime();
+  shaderMaterial.uniforms.uTime.value = clock.getElapsedTime();
   renderer.render(scene, camera);
   requestAnimationFrame(render);
 }
