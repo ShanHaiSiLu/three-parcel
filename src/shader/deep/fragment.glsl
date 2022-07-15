@@ -8,7 +8,7 @@ uniform float uTime;
 varying vec2 vUv;
 
 // 定义常量
-float PI = 3.1415926;
+#define PI  3.1415926
 
 // 随机数
 float random(vec2 st) {
@@ -225,10 +225,15 @@ void main() {
     // gl_FragColor = vec4(strength, strength, strength, 1);
 
     // 37. 实现雷达扫射
-    float alaph = 1.0 - step(0.35, distance(vUv, vec2(0.5)));
-    vec2 rotateUV = rotate(vUv, uTime * 3.0, vec2(0.5));
-    float angle = atan(rotateUV.x - 0.5, rotateUV.y - 0.5);
+    // float alaph = 1.0 - step(0.35, distance(vUv, vec2(0.5)));
+    // vec2 rotateUV = rotate(vUv, uTime * 3.0, vec2(0.5));
+    // float angle = atan(rotateUV.x - 0.5, rotateUV.y - 0.5);
+    // float strength = (angle + PI) / (2.0 * PI);
+    // gl_FragColor = vec4(strength, strength, strength, alaph);
+
+    // 38. 万花筒
+    float angle = atan(vUv.x - 0.5, vUv.y - 0.5);
     float strength = (angle + PI) / (2.0 * PI);
-    gl_FragColor = vec4(strength, strength, strength, alaph);
+    gl_FragColor = vec4(strength, strength, strength, 1);
 
 }
