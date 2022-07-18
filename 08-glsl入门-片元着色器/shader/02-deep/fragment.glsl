@@ -88,6 +88,41 @@ float cnoise(vec2 P) {
 }
 
 void main() {
+    // 1. 噪声实现烟雾、波纹的效果
+    // float strength = noise(vUv);
+    // gl_FragColor = vec4(strength, strength, strength, 1);
+
+    // 2. 噪声加强
+    // float strength = noise(vUv * 10.0);
+    // gl_FragColor = vec4(strength, strength, strength, 1);
+
+    // 3. 清晰化
+    // float strength = step(0.5, noise(vUv * 1000.0));
+    // gl_FragColor = vec4(strength, strength, strength, 1);
+
+    // 4. 柏林噪声
+    // float strength = cnoise(vUv * 10.0);
+    // gl_FragColor = vec4(strength, strength, strength, 1);
+
+    // 5. 清晰化
+    // float strength = abs(cnoise(vUv * 10.0));
+    // gl_FragColor = vec4(strength, strength, strength, 1);
+
+    // 6. 透明光路
+    // float strength = 1.0 - abs(cnoise(vUv * 10.0));
+    // gl_FragColor = vec4(strength, strength, strength, 1);
+
+    // 7. 加入时间参数，运动效果
+    // float strength = 1.0 - step(0.2, abs(cnoise(vUv * 10.0 + uTime)));
+    // gl_FragColor = vec4(strength, strength, strength, 1);
+
+    // 8. 加入时间参数，波纹效果
+    // float strength = 1.0 - sin(cnoise(vUv * 10.0) * 5.0 + uTime);
+    // gl_FragColor = vec4(strength, strength, strength, 1);
+
+    // 9. 锐化波纹
+    // float strength = step(0.1, sin(cnoise(vUv * 10.0) * 20.0 + uTime));
+    // gl_FragColor = vec4(strength, strength, strength, 1);
 
     // 10. 使用混合函数混合颜色
     vec3 basicColor = vec3(1.0, 0.0, 1.0);
