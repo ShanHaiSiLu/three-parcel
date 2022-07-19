@@ -5,7 +5,7 @@
 ## 项目性质
  - 网易课程[Three.js可视化企业实战WEBGL课](https://study.163.com/course/courseMain.htm?courseId=1212491801)的随堂代码
    - 仅包括截止到**课时76**的课程。
-   - 因为`parcel`工具对于文件引入方式不友好，后续的打包运行构建工具转为vite，[项目代码见此处]()。
+   - 因为`parcel`工具对于文件引入方式友好，后续的打包运行构建工具转为vite，[项目代码见此处](https://github.com/ShanHaiSiLu/three-vite)。
  - 个人的threejs学习笔记、学习历程
  - `parcel`打包工具的实战演练
  - 一些有意思的demo
